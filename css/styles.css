@@ -1,0 +1,344 @@
+:root {
+    --blue: #1e3a8a;
+    --blue-light: #3b82f6;
+    --yellow: #facc15;
+    --yellow-light: #fde047;
+    --bg-light: #f8fafc;
+    --text-dark: #1f2937;
+    --text-gray: #4b5563;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    text-align: center;
+}
+
+header {
+    padding: 30px 10px;
+    animation: fadeIn 1s;
+}
+
+header img {
+    height: 120px;
+    max-width: 90%;
+}
+
+header h1 {
+    color: var(--blue);
+    font-size: 2rem;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.button {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: var(--blue);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+    border: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--blue-light);
+}
+
+.section {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.section h2 {
+    color: var(--blue);
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+}
+
+.section h3 {
+    color: var(--blue);
+    font-size: 1.3rem;
+    margin-top: 25px;
+    margin-bottom: 10px;
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.gallery img {
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid var(--yellow);
+}
+
+.contact {
+    background-color: var(--yellow);
+    padding: 30px 10px;
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.contact a {
+    color: var(--blue);
+    text-decoration: none;
+}
+
+.server-reviews {
+    max-width: 900px;
+    margin: 0 auto 20px;
+    text-align: left;
+    color: var(--text-dark);
+}
+
+.review-card {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06);
+    margin-bottom: 16px;
+}
+
+.review-card p {
+    margin: 0 0 10px;
+    line-height: 1.5;
+}
+
+.review-card small {
+    color: var(--text-gray);
+}
+
+.review-form {
+    max-width: 900px;
+    margin: 0 auto 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+    font-size: 1.5rem;
+    justify-content: flex-end;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    cursor: pointer;
+    color: #ddd;
+    transition: color 0.2s;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #facc15;
+}
+
+.review-stars {
+    font-size: 1.2rem;
+    color: #facc15;
+    margin-bottom: 5px;
+}
+
+.review-form textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.review-form textarea:focus {
+    outline: none;
+    border-color: var(--blue-light);
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.15);
+}
+
+.opinion-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 280px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    overflow: hidden;
+    animation: slideIn 0.3s ease-out;
+    border: 1px solid var(--yellow);
+}
+
+.opinion-popup-header {
+    background: var(--blue);
+    color: white;
+    padding: 12px 15px;
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+}
+
+.close-popup-btn {
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.opinion-popup-content {
+    padding: 15px;
+    text-align: left;
+}
+
+.opinion-popup-content p {
+    margin: 0 0 10px;
+    font-size: 0.9rem;
+    color: var(--text-gray);
+}
+
+.opinion-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.opinion-badge {
+    flex: 1;
+    text-align: center;
+    padding: 6px 8px;
+    background: #f1f5f9;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+    transition: 0.2s;
+    border: none;
+}
+
+.opinion-badge:hover {
+    background: var(--yellow);
+    transform: scale(1.02);
+}
+
+.opinion-badge.selected {
+    background: var(--yellow);
+    border: 1px solid var(--blue);
+}
+
+.opinion-comment {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-family: inherit;
+    font-size: 0.8rem;
+    resize: vertical;
+}
+
+.opinion-submit {
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.opinion-submit:hover {
+    background: var(--blue-light);
+}
+
+.popup-message {
+    font-size: 0.8rem;
+    margin-top: 8px;
+    text-align: center;
+    color: green;
+}
+
+footer {
+    background-color: var(--blue);
+    color: white;
+    text-align: center;
+    padding: 20px 10px;
+    font-size: 0.85rem;
+}
+
+footer a {
+    color: var(--yellow-light);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    margin: 10px 0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 1.6rem;
+    }
+    .button {
+        display: block;
+        width: 90%;
+        margin: 0 auto;
+        padding: 14px;
+        font-size: 0.9rem;
+        text-align: center;
+    }
+    .section {
+        padding: 10px;
+    }
+    .gallery img {
+        height: auto;
+    }
+    .opinion-popup {
+        width: 260px;
+        right: 10px;
+        bottom: 10px;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}

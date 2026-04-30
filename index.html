@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="google-site-verification" content="Z3Cr5yXZHnKJNndBDgnV2Njk6meP5aU_F-6ZMSRP26c" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Spray foam insulation in Milwaukee. Real customer reviews, service information and free quotes. Family business with over 20 years of experience and specialized on closed cell.">
+    <title>Loading... | De Anda's Insulation</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .splash-container {
+            text-align: center;
+            padding: 2rem;
+        }
+        .logo-image {
+            max-width: 280px;
+            width: 90%;
+            height: auto;
+            animation: pulse 1.2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(0, 150, 255, 0.4));
+            border-radius: 30px;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+        .loading-text {
+            margin-top: 30px;
+            color: white;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+        }
+        .dots {
+            display: inline-block;
+            width: 60px;
+            text-align: left;
+        }
+        .progress-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 3px;
+            margin: 25px auto 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #00aaff;
+            border-radius: 3px;
+            animation: loading 4s linear forwards;
+        }
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .company-name {
+            margin-top: 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* CAPTCHA styles */
+        .captcha-container {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .captcha-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+        .error-message {
+            color: #ff4444;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container">
+        <img src="imagenes/logo acortado.png" alt="De Anda's Insulation" class="logo-image" onerror="this.src='https://via.placeholder.com/200?text=Logo'">
+        <div class="loading-text" id="loadingText">
+            Loading<span class="dots">...</span>
+        </div>
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <!-- CAPTCHA Container -->
+        <div class="captcha-container" id="captchaContainer">
+            <div class="loading-text" style="font-size: 1.1rem; margin-bottom: 20px;">
+                Security Verification
+            </div>
+            <div class="captcha-wrapper">
+                <div class="g-recaptcha" 
+                     data-sitekey="6Lf_788sAAAAAIg7DPzvZUUDlPpQmGP_VxzdtxXi"
+                     data-callback="onCaptchaSuccess"
+                     data-expired-callback="onCaptchaExpired">
+                </div>
+            </div>
+            <div class="error-message" id="errorMessage">
+                Please complete the security verification
+            </div>
+        </div>
+        
+        <div class="company-name">De Anda's Insulation<br><br> <strong>created for Daniel de Anda</strong></div>
+    </div>
+
+    <script>
+        let captchaCompleted = false;
+        let loadingFinished = false;
+
+        // Function called when CAPTCHA is successfully completed
+        function onCaptchaSuccess() {
+            captchaCompleted = true;
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // If loading already finished, redirect immediately
+            if (loadingFinished) {
+                redirectToMain();
+            }
+        }
+
+        // Function called when CAPTCHA expires
+        function onCaptchaExpired() {
+            captchaCompleted = false;
+        }
+
+        // Function to redirect
+        function redirectToMain() {
+            window.location.href = "inicio.html";
+        }
+
+        // Show CAPTCHA after 4 seconds
+        setTimeout(function() {
+            // Hide loading elements
+            document.getElementById('loadingText').style.display = 'none';
+            document.getElementById('progressBar').style.display = 'none';
+            
+            // Show CAPTCHA
+            document.getElementById('captchaContainer').style.display = 'block';
+            
+            loadingFinished = true;
+        }, 4000);
+
+        // Additional validation when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.target.id === 'captchaContainer' && 
+                        mutation.target.style.display === 'block' &&
+                        !captchaCompleted) {
+                        document.getElementById('errorMessage').style.display = 'block';
+                    }
+                });
+            });
+            
+            const captchaContainer = document.getElementById('captchaContainer');
+            observer.observe(captchaContainer, { attributes: true, attributeFilter: ['style'] });
+        });
+    </script>
+</body>
+</html>
