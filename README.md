@@ -260,10 +260,10 @@ Este repositorio contiene **TODO el código** necesario para que el sitio web fu
 
 ---
 
-- **Sitio web creado por:** Daniel de Anda
-- **Para:** De Anda's Insulation LLC
-- **Año:** 2026
-- **Tecnología:** HTML, CSS, JavaScript, Google reCAPTCHA v3, JSONBin.io API
-- **Hosting:** Netlify
-- **Fecha de actualización: 11-junio-2026**
-- **URL: <a>https://deandasinsulation.netlify.app/</a>**
+**Sitio web creado por:** Daniel de Anda
+**Para:** De Anda's Insulation LLC
+**Año:** 2026
+**Tecnología:** HTML, CSS, JavaScript, Google reCAPTCHA v3, JSONBin.io API
+**Hosting:** Netlify
+**Fecha de actualización: 11-junio-2026**
+**URL: <a>https://deandasinsulation.netlify.app/</a>**
