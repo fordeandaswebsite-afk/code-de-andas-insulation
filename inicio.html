@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta name="google-site-verification" content="Z3Cr5yXZHnKJNndBDgnV2Njk6meP5aU_F-6ZMSRP26c" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="De Anda's Insulation - Professional spray foam insulation in Milwaukee. Closed cell specialists with 20+ years experience. Free quotes, family business.">
+    <meta name="author" content="De Anda´s Insulation">
+    <title>De Anda's Insulation | Spray Foam Specialists in Milwaukee</title>
+    <link rel="icon" href="imagenes/logo acortado.png" type="image/png">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- PANTALLA DE CARGA -->
+<div id="splashOverlay" class="splash-overlay">
+    <div class="splash-card">
+        <img src="imagenes/logo acortado.png" class="splash-logo" alt="Logo" width="100" height="100"
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22200%22 height=%22200%22 rx=%2230%22 fill=%22%23c0392b%22/%3E%3C/text%3E%3C/svg%3E'">
+        <h1 class="splash-title">De Anda's <span class="blue-text">Insulation</span></h1>
+        <p class="splash-subtitle">Specialists in closed cell spray foam</p>
+        <div class="splash-badge"><span class="badge">★ 20+ Years Experience</span><span class="badge">★ Family Business</span></div>
+        <div class="progress-section" id="progressSection">
+            <div class="progress-info"><span>Secure verification</span><span id="progressPercent">0%</span></div>
+            <div class="progress-bar-elegant"><div class="progress-fill-elegant" id="progressFill"></div></div>
+            <p id="progressStatus">Initializing secure environment...</p>
+        </div>
+        <div class="verifying-section" id="verifyingSection" style="display:none">
+            <div class="verifying-spinner"></div>
+            <p id="verifyingStatus">Verifying in background...</p>
+        </div>
+        <div class="splash-footer"><p>© 2026 De Anda's Insulation — Milwaukee, WI</p></div>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL (simple placeholder para evitar perder usuarios) -->
+<div id="mainWebsite" style="display:none">
+    <header>
+        <div class="logo-container"><img src="imagenes/logo.jpg" alt="Logo" width="80" height="80"></div>
+        <div class="header-content"><h1>De Anda's <span class="red-text">Insulation</span></h1><p class="tagline">Especialistas en Closed Cell Spray Foam</p></div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Bienvenido — cargando contenido...</h2>
+            <p>Si la página no carga automáticamente, por favor actualiza en unos segundos o contacta al (414) 791-5065.</p>
+            <a href="tel:+14147915065" class="btn-primary">Llámanos</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 De Anda's Insulation</p>
+    </footer>
+</div>
+
+<!-- scripts -->
+<script>
+// Versión robusta de la pantalla de carga: evita fallos si faltan elementos y garantiza que el sitio principal se muestre.
+(function() {
+    function showMain() {
+        const splash = document.getElementById('splashOverlay');
+        const main = document.getElementById('mainWebsite');
+        try {
+            if (splash) splash.style.display = 'none';
+            if (main) main.style.display = 'block';
+        } catch (e) { console.error('showMain error', e); }
+    }
+
+    // Si el DOM ya está listo, inicializar; si no, espera DOMContentLoaded
+    function initSplash() {
+        const splashOverlay = document.getElementById('splashOverlay');
+        const mainWebsite = document.getElementById('mainWebsite');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressSection = document.getElementById('progressSection');
+        const verifyingSection = document.getElementById('verifyingSection');
+
+        if (splashOverlay) splashOverlay.style.display = 'flex';
+        if (mainWebsite) mainWebsite.style.display = 'none';
+
+        let progress = 0;
+        const interval = setInterval(() => {
+            try {
+                progress += Math.floor(Math.random() * 10) + 5;
+                if (progress > 100) progress = 100;
+                if (progressFill) progressFill.style.width = progress + '%';
+                if (progressPercent) progressPercent.innerText = progress + '%';
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    if (progressSection) progressSection.style.display = 'none';
+                    if (verifyingSection) verifyingSection.style.display = 'block';
+                    setTimeout(showMain, 800);
+                }
+            } catch (err) {
+                console.error('progress tick error', err);
+                clearInterval(interval);
+                showMain();
+            }
+        }, 80);
+
+        // Safety fallback: after 7 seconds show main anyway
+        setTimeout(() => {
+            try { showMain(); } catch (e) { console.error(e); }
+        }, 7000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSplash);
+    } else {
+        initSplash();
+    }
+})();
+</script>
+</body>
+</html>
