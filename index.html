@@ -31,7 +31,7 @@
              onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22200%22 height=%22200%22 rx=%2230%22 fill=%22%23c0392b%22/%3E%3Ctext x=%22100%22 y=%22115%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2220%22%3EDA%3C/text%3E%3C/svg%3E'">
         <h1 class="splash-title">De Anda's <span class="blue-text">Insulation</span></h1>
         <p class="splash-subtitle">Specialists in closed cell spray foam</p>
-        <div class="splash-badge"><span class="badge">★ 20+ Years Experience</span><span class="badge">★ Family Business</span></div>
+        <div class="splash-badge"><span class="badge">* 20+ Years Experience</span><span class="badge">* Family Business</span></div>
         <div class="progress-section" id="progressSection">
             <div class="progress-info"><span>Secure verification</span><span id="progressPercent">0%</span></div>
             <div class="progress-bar-elegant"><div class="progress-fill-elegant" id="progressFill"></div></div>
@@ -62,7 +62,7 @@
 
     <section class="hero">
         <div class="hero-content">
-            <div class="hero-badge">★ Wisconsin's Trusted Insulation Experts</div>
+            <div class="hero-badge">* Wisconsin's Trusted Insulation Experts</div>
             <h2>Professional Spray Foam <span class="blue-text">Insulation</span> in Milwaukee</h2>
             <p>Reduce energy bills up to 40% with our premium closed-cell spray foam. Family-owned with over 20 years of experience.</p>
             <div class="hero-buttons"><a href="#contact" class="btn-primary">Request Free Estimate</a><a href="#reviews" class="btn-secondary">Read Customer Reviews ★ <span id="heroRating">4.9</span></a></div>
@@ -112,18 +112,18 @@
         <div class="video-links"><a href="https://www.facebook.com/p/De-Andas-Insulation-LLC-100089638231971/" target="_blank" class="btn-secondary">📘 More on Facebook</a><a href="videos.html" class="btn-secondary">🎬 See more videos</a></div>
     </section>
 
-    <!-- SECCIÓN DE RESEÑAS CON JSONBin.io -->
+    <!-- SECCIÓN DE RESEÑAS -->
     <section class="section" id="reviews">
         <div class="section-header"><span class="section-tag">Testimonials</span><h2>What Our <span class="red-text">Customers</span> Say</h2><p>Rated <span id="averageRatingDisplay">4.9</span> out of 5 based on <span id="totalReviewsCount">0</span> customer reviews</p></div>
         <div id="reviewsContainer" class="reviews-grid"><div class="loading-reviews">Loading reviews...</div></div>
         <div class="review-form">
             <h3>Leave Your Review</h3>
             <div class="star-rating">
-                <input type="radio" id="rating-5" name="rating" value="5"><label for="rating-5">★</label>
-                <input type="radio" id="rating-4" name="rating" value="4"><label for="rating-4">★</label>
-                <input type="radio" id="rating-3" name="rating" value="3"><label for="rating-3">★</label>
-                <input type="radio" id="rating-2" name="rating" value="2"><label for="rating-2">★</label>
-                <input type="radio" id="rating-1" name="rating" value="1"><label for="rating-1">★</label>
+                <input type="radio" id="rating-5" name="rating" value="5"><label for="rating-5">*</label>
+                <input type="radio" id="rating-4" name="rating" value="4"><label for="rating-4">*</label>
+                <input type="radio" id="rating-3" name="rating" value="3"><label for="rating-3">*</label>
+                <input type="radio" id="rating-2" name="rating" value="2"><label for="rating-2">*</label>
+                <input type="radio" id="rating-1" name="rating" value="1"><label for="rating-1">*</label>
             </div>
             <input type="text" id="review-name" placeholder="Your name (optional)">
             <textarea id="review-input" placeholder="Write your review here..." rows="3"></textarea>
@@ -148,6 +148,166 @@
         <div class="footer-bottom"><p>Website created by Daniel de Anda | <a href="https://deandastech.netlify.app/" target="_blank">View more</a></p><p><small>© 2026 De Anda's Insulation. All rights reserved.</small></p></div>
     </footer>
 </div>
+
+<!-- SCRIPTS -->
 <script src="js/reviews.js"></script>
+<script>
+// ============================================
+// PANTALLA DE CARGA - CORREGIDA
+// ============================================
+(function() {
+    let progress = 0;
+    let isInitialized = false;
+    
+    const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 10) + 5;
+        if (progress >= 100) progress = 100;
+        
+        const fill = document.getElementById('progressFill');
+        const percent = document.getElementById('progressPercent');
+        if (fill) fill.style.width = progress + '%';
+        if (percent) percent.innerText = progress + '%';
+        
+        if (progress >= 100 && !isInitialized) {
+            clearInterval(interval);
+            isInitialized = true;
+            
+            // Mostrar sección de verificación
+            const progressSection = document.getElementById('progressSection');
+            const verifyingSection = document.getElementById('verifyingSection');
+            if (progressSection) progressSection.style.display = 'none';
+            if (verifyingSection) verifyingSection.style.display = 'block';
+            
+            // Esperar a que reviews.js se cargue e inicialice
+            const checkAndInit = () => {
+                if (typeof window.initReviewSystem === 'function') {
+                    // Inicializar el sistema de reseñas
+                    window.initReviewSystem().then(() => {
+                        // Ocultar pantalla de carga
+                        setTimeout(() => {
+                            const overlay = document.getElementById('splashOverlay');
+                            const main = document.getElementById('mainWebsite');
+                            if (overlay) overlay.style.display = 'none';
+                            if (main) main.style.display = 'block';
+                            
+                            // Mostrar popup después de 3 segundos
+                            setTimeout(() => {
+                                showOpinionPopup();
+                            }, 3000);
+                        }, 500);
+                    }).catch(err => {
+                        console.error('Error initializing:', err);
+                        // Forzar carga aunque falle
+                        forceLoad();
+                    });
+                } else {
+                    // Si reviews.js no está listo, esperar y reintentar
+                    setTimeout(checkAndInit, 200);
+                }
+            };
+            
+            const forceLoad = () => {
+                const overlay = document.getElementById('splashOverlay');
+                const main = document.getElementById('mainWebsite');
+                if (overlay) overlay.style.display = 'none';
+                if (main) main.style.display = 'block';
+                // Intentar inicializar de nuevo después
+                setTimeout(() => {
+                    if (typeof window.initReviewSystem === 'function') {
+                        window.initReviewSystem();
+                    }
+                }, 1000);
+            };
+            
+            // Iniciar verificación
+            setTimeout(checkAndInit, 300);
+            
+            // Timeout de seguridad (10 segundos máximo)
+            setTimeout(forceLoad, 10000);
+        }
+    }, 80);
+    
+    // Función para mostrar popup de opinión
+    function showOpinionPopup() {
+        if (document.querySelector('.opinion-popup')) return;
+        
+        const popup = document.createElement('div');
+        popup.className = 'opinion-popup';
+        popup.innerHTML = `
+            <div class="opinion-popup-header">
+                <span>💬 Your opinion matters</span>
+                <span class="opinion-popup-close">×</span>
+            </div>
+            <div class="opinion-popup-content">
+                <p>How was your experience with our website?</p>
+                <div class="opinion-buttons">
+                    <button data-val="excellent" class="opinion-badge">😊 Excellent</button>
+                    <button data-val="good" class="opinion-badge">🙂 Good</button>
+                    <button data-val="average" class="opinion-badge">😐 Average</button>
+                    <button data-val="bad" class="opinion-badge">😕 Bad</button>
+                </div>
+                <textarea class="opinion-comment" placeholder="Comment (optional)" rows="2"></textarea>
+                <button class="opinion-submit">Send Opinion</button>
+                <div class="popup-message"></div>
+            </div>
+        `;
+        document.body.appendChild(popup);
+        
+        let selected = null;
+        popup.querySelectorAll('.opinion-badge').forEach(b => {
+            b.onclick = function() {
+                popup.querySelectorAll('.opinion-badge').forEach(x => x.classList.remove('selected'));
+                this.classList.add('selected');
+                selected = this.getAttribute('data-val');
+            };
+        });
+        
+        popup.querySelector('.opinion-submit').onclick = async () => {
+            if (!selected) {
+                popup.querySelector('.popup-message').textContent = 'Select a rating';
+                return;
+            }
+            const fd = new FormData();
+            fd.append('_subject', `Website Opinion: ${selected}`);
+            fd.append('Rating', selected);
+            fd.append('Comment', popup.querySelector('.opinion-comment').value || '');
+            await fetch('https://formsubmit.co/ajax/deandastech@gmail.com', { method: 'POST', body: fd });
+            popup.querySelector('.popup-message').textContent = 'Thank you! ❤️';
+            setTimeout(() => popup.remove(), 1500);
+        };
+        
+        popup.querySelector('.opinion-popup-close').onclick = () => popup.remove();
+        
+        // Drag functionality
+        let drag = false, offX, offY;
+        const header = popup.querySelector('.opinion-popup-header');
+        header.onmousedown = (e) => {
+            if (e.target.classList.contains('opinion-popup-close')) return;
+            drag = true;
+            offX = e.clientX - popup.offsetLeft;
+            offY = e.clientY - popup.offsetTop;
+            popup.style.cursor = 'grabbing';
+        };
+        window.onmousemove = (e) => {
+            if (drag) {
+                popup.style.left = Math.min(
+                    window.innerWidth - popup.offsetWidth - 10,
+                    Math.max(10, e.clientX - offX)
+                ) + 'px';
+                popup.style.top = Math.min(
+                    window.innerHeight - popup.offsetHeight - 10,
+                    Math.max(10, e.clientY - offY)
+                ) + 'px';
+                popup.style.right = 'auto';
+            }
+        };
+        window.onmouseup = () => {
+            drag = false;
+            popup.style.cursor = 'default';
+        };
+    }
+})();
+</script>
+
 </body>
 </html>

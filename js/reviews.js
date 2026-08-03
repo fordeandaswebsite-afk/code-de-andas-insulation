@@ -10,11 +10,11 @@ const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
 // Rate limiting configuration
 const RATE_LIMIT = {
-    maxRequests: 3,           // Maximum requests allowed
-    timeWindow: 60000,        // Time window in milliseconds (1 minute)
-    requests: [],             // Store timestamps of requests
+    maxRequests: 3,
+    timeWindow: 60000,
+    requests: [],
     isBlocked: false,
-    blockDuration: 300000,    // 5 minutes block duration
+    blockDuration: 300000,
     blockTimer: null
 };
 
@@ -46,7 +46,6 @@ function sanitizeRating(rating) {
 
 function sanitizeText(text) {
     if (!text) return '';
-    // Remove HTML tags and special characters
     return text.replace(/[<>]/g, '').trim();
 }
 
@@ -57,12 +56,10 @@ function sanitizeText(text) {
 function checkRateLimit() {
     const now = Date.now();
     
-    // Limpiar requests antiguas
     RATE_LIMIT.requests = RATE_LIMIT.requests.filter(
         timestamp => now - timestamp < RATE_LIMIT.timeWindow
     );
     
-    // Verificar si esta bloqueado
     if (RATE_LIMIT.isBlocked) {
         const remainingBlock = Math.ceil(
             (RATE_LIMIT.blockTimer - now) / 1000
@@ -73,16 +70,13 @@ function checkRateLimit() {
                 message: `Too many requests. Please wait ${remainingBlock} seconds.`
             };
         } else {
-            // Desbloquear
             RATE_LIMIT.isBlocked = false;
             RATE_LIMIT.requests = [];
             RATE_LIMIT.blockTimer = null;
         }
     }
     
-    // Verificar si excede el limite
     if (RATE_LIMIT.requests.length >= RATE_LIMIT.maxRequests) {
-        // Bloquear por exceso de requests
         RATE_LIMIT.isBlocked = true;
         RATE_LIMIT.blockTimer = now + RATE_LIMIT.blockDuration;
         
@@ -92,7 +86,6 @@ function checkRateLimit() {
         };
     }
     
-    // Permitir request y registrar
     RATE_LIMIT.requests.push(now);
     return { allowed: true };
 }
@@ -137,7 +130,6 @@ async function loadReviews() {
         if (response.ok) {
             const data = await response.json();
             if (data.record && Array.isArray(data.record) && data.record.length > 0) {
-                // Sanitizar datos
                 return data.record.map(r => ({
                     id: r.id || Date.now(),
                     rating: sanitizeRating(r.rating),
@@ -147,7 +139,6 @@ async function loadReviews() {
                 }));
             }
         }
-        // Si falla, guardar datos por defecto
         await saveReviews(DEFAULT_REVIEWS);
         return DEFAULT_REVIEWS;
     } catch (error) {
@@ -174,13 +165,11 @@ async function saveReviews(reviews) {
 }
 
 async function addReview(rating, text, author) {
-    // Verificar rate limit
     const rateCheck = checkRateLimit();
     if (!rateCheck.allowed) {
         throw new Error(rateCheck.message);
     }
 
-    // Validar datos
     const cleanRating = sanitizeRating(rating);
     const cleanText = sanitizeText(text);
     const cleanAuthor = author ? escapeHtml(author.trim()) : 'Customer';
@@ -231,19 +220,15 @@ async function renderReviews() {
             return;
         }
         
-        // Calcular estadísticas
         let totalStars = 0;
         reviews.forEach(r => totalStars += r.rating);
         const average = reviews.length > 0 ? (totalStars / reviews.length) : 0;
         const roundedAvg = Math.round(average * 10) / 10;
         
-        // Actualizar estadísticas
         updateReviewStats(reviews.length, roundedAvg);
         
-        // Ordenar por ID descendente (más reciente primero)
         const sorted = [...reviews].sort((a, b) => b.id - a.id);
         
-        // Renderizar reseñas
         container.innerHTML = sorted.map(r => {
             const stars = getStars(r.rating);
             const text = escapeHtml(r.text || '');
@@ -274,10 +259,6 @@ function updateReviewStats(count, average) {
     if (heroRating) heroRating.innerText = average.toFixed(1);
 }
 
-// ============================================
-// FUNCIONES DE ENVÍO DE CORREO
-// ============================================
-
 async function sendEmailNotification(review, rating, author) {
     try {
         const formData = new FormData();
@@ -297,23 +278,19 @@ async function sendEmailNotification(review, rating, author) {
 }
 
 // ============================================
-// INICIALIZACIÓN DEL SISTEMA
+// INICIALIZACIÓN DEL SISTEMA - EXPUESTA GLOBALMENTE
 // ============================================
 
-async function initReviewSystem() {
+window.initReviewSystem = async function() {
     try {
-        // Renderizar reseñas iniciales
         await renderReviews();
         
-        // Configurar evento de envío
         const submitBtn = document.getElementById('submit-review');
         if (submitBtn) {
-            // Remover event listeners existentes
             const newBtn = submitBtn.cloneNode(true);
             submitBtn.parentNode.replaceChild(newBtn, submitBtn);
             
             newBtn.addEventListener('click', async function(e) {
-                // Prevenir múltiples envíos
                 if (this.disabled) return;
                 this.disabled = true;
                 
@@ -322,7 +299,6 @@ async function initReviewSystem() {
                 const author = document.getElementById('review-name')?.value.trim();
                 const msg = document.getElementById('reviewFormMessage');
                 
-                // Validaciones
                 if (!rating) {
                     msg.textContent = 'Please select a star rating.';
                     this.disabled = false;
@@ -343,25 +319,18 @@ async function initReviewSystem() {
                 msg.style.color = '#0066cc';
                 
                 try {
-                    // Intentar guardar la reseña
                     await addReview(rating, text, author);
                     
-                    // Éxito
                     msg.textContent = 'Review submitted successfully!';
                     msg.style.color = 'green';
                     
-                    // Limpiar formulario
                     document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
                     document.getElementById('review-input').value = '';
                     document.getElementById('review-name').value = '';
                     
-                    // Recargar reseñas
                     await renderReviews();
-                    
-                    // Enviar notificación por email
                     await sendEmailNotification(text, rating, author);
                     
-                    // Mostrar mensaje de éxito
                     setTimeout(() => {
                         msg.textContent = '';
                     }, 3000);
@@ -376,46 +345,20 @@ async function initReviewSystem() {
             });
         }
         
-        // Actualizar estado del rate limit cada 5 segundos
         setInterval(updateRateLimitStatus, 5000);
-        
         console.log('Review system initialized successfully');
         
     } catch (error) {
         console.error('Init error:', error);
     }
-}
+};
 
-// ============================================
-// EXPORTAR FUNCIONES (si se usa con módulos)
-// ============================================
-
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-        loadReviews,
-        saveReviews,
-        addReview,
-        renderReviews,
-        initReviewSystem,
-        escapeHtml,
-        sanitizeRating,
-        getStars,
-        checkRateLimit
-    };
-}
-
-// ============================================
-// AUTO-INICIALIZACIÓN
-// ============================================
-
-// Inicializar cuando el DOM esté listo
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initReviewSystem);
-} else {
-    initReviewSystem();
-}
-
-// Si jQuery está presente, también inicializar con él
-if (typeof $ !== 'undefined') {
-    $(document).ready(initReviewSystem);
+// Auto-inicialización si el DOM ya está listo
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    // Esperar un poco para asegurar que el DOM está listo
+    setTimeout(() => {
+        if (typeof window.initReviewSystem === 'function') {
+            window.initReviewSystem();
+        }
+    }, 100);
 }
