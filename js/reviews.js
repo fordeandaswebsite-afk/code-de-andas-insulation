@@ -282,6 +282,11 @@ async function sendEmailNotification(review, rating, author) {
 // ============================================
 
 window.initReviewSystem = async function() {
+    if (window.__reviewSystemInitialized) {
+        return;
+    }
+    window.__reviewSystemInitialized = true;
+
     try {
         await renderReviews();
         
@@ -353,11 +358,10 @@ window.initReviewSystem = async function() {
     }
 };
 
-// Auto-inicialización si el DOM ya está listo
+// Auto-inicialización opcional si el DOM ya está listo
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    // Esperar un poco para asegurar que el DOM está listo
     setTimeout(() => {
-        if (typeof window.initReviewSystem === 'function') {
+        if (!window.__reviewSystemInitialized && typeof window.initReviewSystem === 'function') {
             window.initReviewSystem();
         }
     }, 100);
