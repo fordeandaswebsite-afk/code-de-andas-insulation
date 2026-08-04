@@ -9,6 +9,7 @@
     const verifyingStatus = document.getElementById('verifyingStatus');
 
     function showMainContent() {
+        document.body.classList.add('splash-complete');
         if (splashOverlay) {
             splashOverlay.style.display = 'none';
         }
