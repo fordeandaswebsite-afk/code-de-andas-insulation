@@ -1,4 +1,3 @@
 User-agent: *
-Disallow: /
-Disallow: /inicio.html
+Disallow: 
 Sitemap: https://deandasinsulation.netlify.app/sitemap-0.xml
